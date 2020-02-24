@@ -1,0 +1,30 @@
+---
+- name: Configure sysctl
+  sysctl:
+    name: "{{ item.s }}"
+    value: "{{ item.v }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items:
+    - { s: net.ipv4.ip_forward, v: 1 }
+    - { s: net.bridge.bridge-nf-call-iptables, v: 0 }
+
+- name: Load loop
+  modprobe:
+    name: loop
+    state: present
+
+- name: Install dependencies
+  apt:
+    name:
+      - dmsetup
+      - openssh-client
+      - git
+      - binutils
+      - docker.io
+      - e2fsprogs
+      - mount
+      - tar
+      - jq
+    install_recommends: no

@@ -1,0 +1,18 @@
+---
+- name: Check installed
+  command: "footloose version | awk '{print $2}'"
+  ignore_errors: yes
+  changed_when: false
+  register: footloose
+
+- name: Install footloose
+  get_url:
+    url: "https://github.com/weaveworks/footloose/releases/download/{{ footloose_version }}/footloose-{{ footloose_version }}-linux-{{ ansible_architecture }}"
+    dest: "/usr/local/bin/footloose"
+    mode: 0755
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+  check_mode: false
+  when: 'footloose.stdout != footloose_version'

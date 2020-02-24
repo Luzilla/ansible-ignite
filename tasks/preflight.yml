@@ -1,0 +1,22 @@
+---
+- name: Can haz kvm?
+  apt:
+    name:
+      - cpu-checker
+
+- name: Run 'kvm-ok'
+  command: kvm-ok
+  ignore_errors: yes
+  changed_when: false
+  register: kvm
+
+- name: Ensure we can use kvm
+  assert:
+    that:
+      - "'INFO: /dev/kvm exists' in kvm.stdout_lines[0]"
+      - "'KVM acceleration can be used' in kvm.stdout_lines[1]"
+
+- name: Only Debian/Ubuntu
+  assert:
+    that:
+      - '"Debian" == ansible_os_family'

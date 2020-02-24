@@ -1,0 +1,5 @@
+---
+cni_version: 0.8.2
+go_arch: amd64
+ignite_version: 0.6.3
+footloose_version: 0.6.3
